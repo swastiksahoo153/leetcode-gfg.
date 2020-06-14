@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int go(int i,vector<int> graph[],vector<bool>& hasApple,vector<bool> &vis){
+        int res=0;
+        vis[i]=1;
+        for(auto nei:graph[i]){
+            if(!vis[nei]){
+                int nei_val=go(nei,graph,hasApple,vis);
+                if(nei_val!=0) res+=1+nei_val;
+                else if(nei_val==0 && hasApple[nei]) res++;
+            }            
+        }
+        return res;
+    }
+    
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
+        vector<int> graph[n];
+        for(auto edge:edges){
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+        vector<bool> vis(n,0);
+        return 2*go(0,graph,hasApple,vis);
+    }
+};
