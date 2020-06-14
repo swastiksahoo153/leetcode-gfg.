@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> res;
+        vector<vector<int>> graph(edges.size()+1);
+        
+        for(auto edge:edges){
+            set<int> vis;
+            if(!graph[edge[0]].empty() && !graph[edge[1]].empty() && go(edge[0],edge[1],-1,graph,vis)) res=edge;
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+        
+        return res;        
+    }
+    
+    bool go(int src,int dest,int pre,vector<vector<int>> &graph,set<int> &vis){
+        if(src==dest) return 1;
+        vis.insert(src);
+        for(auto nei:graph[src]){
+            if(!vis.count(nei) && go(nei,dest,src,graph,vis)) return 1;
+        }
+        return 0;
+    }
+};
