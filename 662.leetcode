@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<pair<unsigned long long,unsigned long long>> res;
+    
+    void nodes_before(TreeNode* root,unsigned long long level,unsigned long long val){
+        if(!root) return;
+        if(level==res.size()){
+            res.push_back({val,val});
+        }
+        else{
+            if(val<res[level].first) res[level].first=val;
+            if(val>res[level].second) res[level].second=val;
+        }
+        
+        nodes_before(root->left,level+1,2*val-1);
+        nodes_before(root->right,level+1,2*val);
+    }
+    
+    unsigned long long widthOfBinaryTree(TreeNode* root) {
+        nodes_before(root,0,1);
+        unsigned long long mx=0;
+        for(auto level:res){
+            mx=max(mx,level.second-level.first+1);
+        }
+        return mx;
+    }
+};
