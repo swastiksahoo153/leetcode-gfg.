@@ -1,0 +1,53 @@
+class Solution {
+public:
+    string validIPAddress(string IP) {
+        if(isIPv4(IP)) return "IPv4";
+        else if(isIPv6(IP)) return "IPv6";
+        return "Neither";
+    }
+    
+    bool isIPv4(string IP){
+        vector<string> res;
+        string s;
+        for(auto ch:IP){
+            if(ch!='.' && (!isdigit(ch))) return 0;
+            if(ch=='.'){
+                res.push_back(s);
+                s="";
+            }
+            else s.push_back(ch);
+            if(s.size()>3) return 0; 
+        }
+        res.push_back(s);
+        if(res.size()!=4) return 0;
+        for(auto s:res){
+            if(s.size()==0) return 0;
+            if(s.size()>1 && s[0]=='0') return 0;
+            if(stoi(s)<0 || stoi(s)>255) return 0;
+            
+        }
+        return 1;
+    }
+    
+    bool isIPv6(string IP){
+        vector<string> res;
+        string s;
+        for(auto ch:IP){
+            if(ch==':'){
+                res.push_back(s);
+                s="";
+            }
+            else s.push_back(ch);
+            if(s.size()>4) return 0; 
+        }
+        res.push_back(s);
+        if(res.size()!=8) return 0;
+        for(auto s:res){
+            if(s.size()>4 || s.size()==0) return 0;
+            for(auto ch:s){
+                if(!isdigit(ch) && (toupper(ch)>'F' || toupper(ch)<'A')) return 0;
+            }
+        }
+        return 1;
+    }
+};
