@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+         int n=citations.size();
+        vector<int> vec(n+2,0);
+        
+        map<int,int> mp;
+        
+        for(int i=0;i<n;i++){
+            mp[citations[i]]++;
+            int cur=min(n,citations[i]);
+            vec[cur]++;
+        }
+        
+        for(int i=n;i>=0;i--) vec[i]+=vec[i+1];
+        
+        // vec gives us no of values greater than particular number
+        
+        for(int i=0;i<=n;i++){
+            if(i<=vec[i] && i>=(vec[i]-mp[i])) return i;
+        }
+        
+        return -1;
+    }
+};
