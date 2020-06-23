@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n,wei; 
+int wt[1005];
+int v[1005];
+int dp[1005][1005];
+
+int find_max(int i,int w){
+    if(i>=n) return 0;
+    if(dp[i][w]!=-1) return dp[i][w];
+    int in=0,ex=0;
+    if(w>=wt[i]) in=v[i] + find_max(i+1,w-wt[i]);
+    ex=find_max(i+1,w);
+    
+    return dp[i][w]=max(in,ex);
+}
+
+int main()
+ {
+	int t; cin>>t;
+	while(t--){
+	    memset(dp,0,sizeof(dp));
+	    cin>>n>>wei;
+	    for(int i=0;i<n;i++) cin>>v[i];
+	    for(int i=0;i<n;i++) cin>>wt[i];
+	   // cout<<find_max(0,wei)<<endl;
+	   
+	   for(int i=n-1;i>=0;i--){
+	       for(int j=0;j<n;j++){
+	           int in=0;ex=0;
+	           if(i==n) dp[i][j]=0; 
+	           if(j>=wt[i]) in=v[i]+dp[i+1][j-wt[i]];
+	           ex=dp[i+1][j];
+	           dp[i][j]=max(in,ex);
+	       }
+	   }
+	   cout<<dp[0][wt]<<endl;
+	}
+}
